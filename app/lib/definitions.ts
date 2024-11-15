@@ -9,9 +9,9 @@ export type User = {
   password: string;
 };
 
-export type InstanceData = {
+export type InstanceForm = {
   authToken: string;
   email: string;
   instance: string;
-  // userId: string;
+  userId: string;
 };
