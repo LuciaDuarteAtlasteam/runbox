@@ -1,11 +1,11 @@
 import { sql } from "@vercel/postgres";
-import { InstanceData } from "./definitions";
+import { InstanceForm } from "./definitions";
 
 export async function fetchInstanceData() {
   try {
     console.log("Fetching instance_data...");
 
-    const data = await sql<InstanceData>`SELECT * FROM instance_data`;
+    const data = await sql<InstanceForm>`SELECT * FROM instanceForm`;
 
     return data.rows;
   } catch (error) {
