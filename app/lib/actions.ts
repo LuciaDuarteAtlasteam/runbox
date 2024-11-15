@@ -4,8 +4,9 @@ import { z } from "zod";
 import { sql } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { AuthError } from "next-auth";
+import type { User } from "@/app/lib/definitions";
 
 // Define user schema using Zod
 const FormSchema = z.object({
@@ -28,6 +29,16 @@ export async function saveUserInstanceData(
   prevState: State,
   formData: FormData
 ) {
+  // Get User id
+  const session = await auth();
+  const userEmail = session?.user?.email;
+
+  if (!userEmail) {
+    return { message: "User not authenticated." };
+  }
+  const user = await sql<User>`SELECT * FROM users WHERE email=${userEmail}`;
+  const userId = user.rows[0].id;
+
   // Validate form fields using Zod
   const validatedFields = FormSchema.safeParse({
     authToken: formData.get("authToken"),
@@ -49,8 +60,8 @@ export async function saveUserInstanceData(
   // Insert data into the users table
   try {
     await sql`
-      INSERT INTO instance_data (auth_token, email, instance)
-      VALUES (${authToken}, ${email}, ${instance})
+      INSERT INTO instanceForm (auth_token, email, instance, user_id)
+      VALUES (${authToken}, ${email}, ${instance}, ${userId})
     `;
   } catch (error) {
     console.error(error);
