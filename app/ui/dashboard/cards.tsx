@@ -1,53 +1,27 @@
-import {
-  BanknotesIcon,
-  ClockIcon,
-  UserGroupIcon,
-  InboxIcon,
-} from "@heroicons/react/24/outline";
-// import { lusitana } from "@/app/ui/fonts";
-
-const iconMap = {
-  collected: BanknotesIcon,
-  customers: UserGroupIcon,
-  pending: ClockIcon,
-  invoices: InboxIcon,
-};
-
-export default async function CardWrapper() {
-  return (
-    <>
-      {/* NOTE: Uncomment this code in Chapter 9 */}
-
-      {/* <Card title="Collected" value={totalPaidInvoices} type="collected" />
-      <Card title="Pending" value={totalPendingInvoices} type="pending" />
-      <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
-      <Card
-        title="Total Customers"
-        value={numberOfCustomers}
-        type="customers"
-      /> */}
-    </>
-  );
-}
+import { InstanceForm } from "@/app/lib/definitions";
+import { DeleteInstance, UpdateInstance } from "../invoices/buttons";
 
 export function Card({
   title,
   value,
-  type,
+  instance,
 }: {
   title: string;
-  value: number | string;
-  type: "invoices" | "customers" | "pending" | "collected";
+  value: string;
+  instance: InstanceForm;
 }) {
-  const Icon = iconMap[type];
-
   return (
     <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
-      <div className="flex p-4">
-        {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null}
-        <h3 className="ml-2 text-sm font-medium">{title}</h3>
+      <div className="flex items-center justify-between p-4">
+        <div className="flex items-center">
+          <h3 className="ml-2 text-sm font-medium">{title}</h3>
+        </div>
+        <div className="flex space-x-2">
+          <UpdateInstance instance={instance} />
+          <DeleteInstance id={instance.id} />
+        </div>
       </div>
-      <p>{value}</p>
+      <p className="px-4">{value}</p>
     </div>
   );
 }
