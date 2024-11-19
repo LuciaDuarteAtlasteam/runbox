@@ -72,7 +72,50 @@ export async function saveUserInstanceData(
   revalidatePath("/dashboard/users");
   return { message: "User data saved successfully." };
 }
+export async function updateInstanceData(
+  id: string,
+  prevState: State,
+  formData: FormData
+) {
+  const validatedFields = FormSchema.safeParse({
+    authToken: formData.get("authToken"),
+    email: formData.get("email"),
+    instance: formData.get("instance"),
+  });
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields.",
+    };
+  }
 
+  const { authToken, email, instance } = validatedFields.data;
+
+  try {
+    await sql`
+      UPDATE instanceForm
+      SET auth_token = ${authToken}, email = ${email}, instance = ${instance}
+      WHERE id = ${id}
+    `;
+  } catch (error) {
+    return {
+      message: "Database Error: Failed to Update Instance Data.",
+      error,
+    };
+  }
+
+  revalidatePath("/dashboard/user");
+  redirect("/dashboard/user");
+}
+export async function deleteInstanceData(id: string) {
+  try {
+    await sql`DELETE FROM instanceForm WHERE id = ${id}`;
+    revalidatePath("/dashboard/user");
+    return { message: "Deleted Instance" };
+  } catch (error) {
+    return { message: "Database Error: Failed to Delete Instance." };
+  }
+}
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData
