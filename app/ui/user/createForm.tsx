@@ -13,7 +13,7 @@ import { useActionState } from "react";
 import { saveUserInstanceData, State } from "@/app/lib/actions";
 import { useState } from "react";
 
-export default function UserForm() {
+export default function CreateForm() {
   const initialState: State = { message: null, errors: {} };
 
   const [authToken, setAuthToken] = useState<string>("");
@@ -24,6 +24,7 @@ export default function UserForm() {
     initialState
   );
   const errorMessage = state.message;
+  const isFormValid = authToken && email && instance;
 
   return (
     <form action={formAction} className="space-y-3">
@@ -96,7 +97,7 @@ export default function UserForm() {
             </div>
           </div>
         </div>
-        <Button className="mt-4 w-full" aria-disabled={true}>
+        <Button className="mt-4 w-full" aria-disabled={!isFormValid}>
           Save <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
         <div
@@ -108,6 +109,11 @@ export default function UserForm() {
             <>
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
               <p className="text-sm text-red-500">{errorMessage}</p>
+            </>
+          )}
+          {state.message && state.message !== errorMessage && (
+            <>
+              <p className="text-sm text-green-500">{state.message}</p>
             </>
           )}
         </div>
