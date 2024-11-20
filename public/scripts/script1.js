@@ -1,6 +1,6 @@
 const script1 = {
-  run: (param) => {
-    console.log("Running script 1 with parameters:", param);
+  run: (params, updateOutput) => {
+    updateOutput(`Runing script with params: ${params} `);
 
     return "OMFG";
   },

@@ -1,7 +1,3 @@
-console.log("###########################################################");
-console.log("###################### HERE WE GO #########################");
-console.log("###########################################################");
-
 /// TODO:
 /// create status and reference
 /// when creating object attributes, name attribute already exist, and we dont update the description (needs PUT)
@@ -33,8 +29,8 @@ var createdObjectTypeId = [];
 
 //starting the procedure
 const assetToAssetCopy = {
-  run: async (params) => {
-    console.log("Running script 3 with parameters:", params);
+  run: async (params, updateOutput) => {
+    updateOutput("Running script 3 with parameters:", params);
 
     sourceWorkSpaceId = params.sourceWorkSpaceId;
     targetWorkSpaceId = params.targetWorkSpaceId;
@@ -53,7 +49,7 @@ const assetToAssetCopy = {
     };
 
     objectSchemaIdCopy = await createSchemaCopy(newSchemaData);
-    console.log(`New schema created with ID: ${objectSchemaIdCopy}`);
+    updateOutput(`New schema created with ID: ${objectSchemaIdCopy}`);
 
     await sleep(500);
 
