@@ -1,0 +1,100 @@
+{
+  "scripts": [
+    {
+      "name": "script1",
+      "path": "/scripts/script1.js",
+      "description": "This scripts copies this",
+      "parameters": [
+        {
+          "name": "param1",
+          "label": "Parameter 1",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "param2",
+          "label": "Parameter 2",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "script2",
+      "path": "/scripts/script2.js",
+      "description": "This scripts copies this and you need this",
+      "parameters": [
+        {
+          "name": "param1",
+          "label": "Parameter 1",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "param2",
+          "label": "Parameter 2",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "assetToAssetCopy",
+      "path": "/scripts/assetToAssetCopy.js",
+      "description": "This scripts copies assets from one instance to another",
+      "parameters": [
+        {
+          "name": "sourceWorkSpaceId",
+          "label": "sourceWorkSpaceId",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "targetWorkSpaceId",
+          "label": "targetWorkSpaceId",
+          "type": "text",
+          "required": true
+        },
+
+        {
+          "name": "authName",
+          "label": "authName",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "authPass",
+          "label": "authPass",
+          "type": "text",
+          "required": true
+        },
+
+        {
+          "name": "objectSchemaIdSource",
+          "label": "objectSchemaIdSource",
+          "type": "text",
+          "required": true
+        },
+
+        {
+          "name": "newSchemaDataName",
+          "label": "newSchemaData name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "newSchemaDataObjectSchemaKey",
+          "label": "newSchemaData.objectSchemaKey",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "newSchemaDataDescription",
+          "label": "newSchemaData.description",
+          "type": "text",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
