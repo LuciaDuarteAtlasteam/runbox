@@ -1,7 +1,7 @@
 {
   "scripts": [
     {
-      "name": "script1",
+      "name": "Script 1",
       "path": "/scripts/script1.js",
       "description": "This scripts copies this",
       "parameters": [
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "name": "script2",
+      "name": "Script 2",
       "path": "/scripts/script2.js",
       "description": "This scripts copies this and you need this",
       "parameters": [
@@ -39,58 +39,58 @@
       ]
     },
     {
-      "name": "assetToAssetCopy",
+      "name": "Assets to Assets Copy",
       "path": "/scripts/assetToAssetCopy.js",
       "description": "This scripts copies assets from one instance to another",
       "parameters": [
         {
           "name": "sourceWorkSpaceId",
-          "label": "sourceWorkSpaceId",
+          "label": "Source WorkSpace Id",
           "type": "text",
           "required": true
         },
         {
           "name": "targetWorkSpaceId",
-          "label": "targetWorkSpaceId",
+          "label": "Target WorkSpace Id",
           "type": "text",
           "required": true
         },
 
         {
           "name": "authName",
-          "label": "authName",
+          "label": "Auth Name (E-mail)",
           "type": "text",
           "required": true
         },
         {
           "name": "authPass",
-          "label": "authPass",
+          "label": "Auth Token",
           "type": "text",
           "required": true
         },
 
         {
           "name": "objectSchemaIdSource",
-          "label": "objectSchemaIdSource",
+          "label": "Object Schema Id Source",
           "type": "text",
           "required": true
         },
 
         {
           "name": "newSchemaDataName",
-          "label": "newSchemaData name",
+          "label": "New Schema Name",
           "type": "text",
           "required": true
         },
         {
           "name": "newSchemaDataObjectSchemaKey",
-          "label": "newSchemaData.objectSchemaKey",
+          "label": "New Schema Key",
           "type": "text",
           "required": true
         },
         {
           "name": "newSchemaDataDescription",
-          "label": "newSchemaData.description",
+          "label": "New Schema Description",
           "type": "text",
           "required": true
         }
