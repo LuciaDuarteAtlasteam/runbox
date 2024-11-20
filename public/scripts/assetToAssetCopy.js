@@ -30,8 +30,9 @@ var createdObjectTypeId = [];
 //starting the procedure
 const assetToAssetCopy = {
   run: async (params, updateOutput) => {
-    updateOutput("Running script 3 with parameters:", params);
-
+    updateOutput(
+      `Running script with params: ${JSON.stringify(params, null, 2)}`
+    );
     sourceWorkSpaceId = params.sourceWorkSpaceId;
     targetWorkSpaceId = params.targetWorkSpaceId;
     authName = params.authName;

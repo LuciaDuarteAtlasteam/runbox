@@ -1,6 +1,8 @@
 const script1 = {
   run: (params, updateOutput) => {
-    updateOutput(`Runing script with params: ${params} `);
+    updateOutput(
+      `Running script with params: ${JSON.stringify(params, null, 2)}`
+    );
 
     return "OMFG";
   },
