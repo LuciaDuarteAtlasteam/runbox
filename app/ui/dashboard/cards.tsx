@@ -17,7 +17,6 @@ export function Card({
           <h3 className="ml-2 text-sm font-medium">{title}</h3>
         </div>
         <div className="flex space-x-2">
-          <UpdateInstance instance={instance} />
           <DeleteInstance id={instance.id} />
         </div>
       </div>
