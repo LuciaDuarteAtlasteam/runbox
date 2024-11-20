@@ -8,11 +8,25 @@ export type User = {
   email: string;
   password: string;
 };
-
 export type InstanceForm = {
   id: string;
   authToken: string;
   email: string;
   instance: string;
   userId: string;
+};
+export type ScriptParameter = {
+  name: string;
+  label: string;
+  type: string;
+  required: boolean;
+};
+export type Script = {
+  name: string;
+  path: string;
+  description: string;
+  parameters?: ScriptParameter[];
+};
+export type ScriptData = {
+  scripts: Script[];
 };
