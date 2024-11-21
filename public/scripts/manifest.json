@@ -65,7 +65,7 @@
         {
           "name": "authPass",
           "label": "Auth Token",
-          "type": "text",
+          "type": "password",
           "required": true
         },
 
@@ -116,7 +116,7 @@
         {
           "name": "authPass",
           "label": "Auth Token",
-          "type": "text",
+          "type": "password",
           "required": true
         }
       ]
