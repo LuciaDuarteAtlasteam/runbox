@@ -5,6 +5,7 @@ import { Script, ScriptData } from "@/app/lib/definitions";
 import script1 from "@/public/scripts/script1";
 import script2 from "@/public/scripts/script2";
 import assetToAssetCopy from "@/public/scripts/assetToAssetCopy";
+import schemaList from "@/public/scripts/schemaList";
 
 export default function ScriptsPage() {
   const [formData, setFormData] = useState<
@@ -41,6 +42,8 @@ export default function ScriptsPage() {
           break;
         case "Assets to Assets Copy":
           scriptToRun = assetToAssetCopy;
+        case "Schema List":
+          scriptToRun = schemaList;
           break;
         default:
           throw new Error("Script not found");

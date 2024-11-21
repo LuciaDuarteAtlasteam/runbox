@@ -95,6 +95,31 @@
           "required": true
         }
       ]
+    },
+    {
+      "name": "Schema List",
+      "path": "/scripts/schemaList.js",
+      "description": "Resource to find object schemas in Assets",
+      "parameters": [
+        {
+          "name": "sourceWorkSpaceId",
+          "label": "Workspace Id",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "authName",
+          "label": "Auth Name (E-mail)",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "authPass",
+          "label": "Auth Token",
+          "type": "text",
+          "required": true
+        }
+      ]
     }
   ]
 }
