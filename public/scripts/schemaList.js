@@ -9,7 +9,9 @@ const schemaList = {
     );
 
     const schemasInTarget = await getSchemaList(params);
-    const schemaNames = schemasInTarget.values.map((schema) => schema.name);
+    const schemaNames = schemasInTarget.values.map(
+      (schema) => schema.objectSchemaKey + "  " + schema.name
+    );
     updateOutput(`List: ${JSON.stringify(schemaNames, null, 2)}`);
   },
 };
