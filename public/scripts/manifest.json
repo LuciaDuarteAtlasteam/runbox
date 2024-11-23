@@ -55,20 +55,6 @@
           "type": "text",
           "required": true
         },
-
-        {
-          "name": "authName",
-          "label": "Auth Name (E-mail)",
-          "type": "text",
-          "required": true
-        },
-        {
-          "name": "authPass",
-          "label": "Auth Token",
-          "type": "password",
-          "required": true
-        },
-
         {
           "name": "objectSchemaIdSource",
           "label": "Object Schema Id Source",
@@ -105,18 +91,6 @@
           "name": "sourceWorkSpaceId",
           "label": "Workspace Id",
           "type": "text",
-          "required": true
-        },
-        {
-          "name": "authName",
-          "label": "Auth Name (E-mail)",
-          "type": "text",
-          "required": true
-        },
-        {
-          "name": "authPass",
-          "label": "Auth Token",
-          "type": "password",
           "required": true
         }
       ]
