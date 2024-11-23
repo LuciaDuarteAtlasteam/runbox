@@ -1,18 +1,23 @@
 "use client";
+
 import React, { useState } from "react";
 import scriptsData from "public/scripts/manifest.json";
-import { Script, ScriptData } from "@/app/lib/definitions";
-import script1 from "@/public/scripts/script1";
-import script2 from "@/public/scripts/script2";
-import assetToAssetCopy from "@/public/scripts/assetToAssetCopy";
-import schemaList from "@/public/scripts/schemaList";
+import ScriptSelector from "./scriptSelector";
+import ScriptForm from "./scriptForm";
+import OutputDisplay from "@/app/dashboard/scripts/outputDisplay";
+import { InstanceForm, Script } from "@/app/lib/definitions";
 
 export default function ScriptsPage() {
+  const [selectedScript, setSelectedScript] = useState<Script | null>(null);
   const [formData, setFormData] = useState<
     Record<string, Record<string, string>>
   >({});
   const [output, setOutput] = useState<string>("");
-  const [selectedScript, setSelectedScript] = useState<Script | null>(null);
+
+  const handleScriptSelection = (script: Script | null) => {
+    setSelectedScript(script);
+    setOutput("");
+  };
 
   const handleInputChange = (
     scriptName: string,
@@ -28,36 +33,16 @@ export default function ScriptsPage() {
     }));
   };
 
-  const executeScript = async (scriptName: string) => {
-    const params = formData[scriptName] || {};
-
+  const executeScript = async (selectedCredential: InstanceForm) => {
+    if (!selectedScript) return;
+    console.log(selectedCredential.auth_token);
+    const params = {
+      ...(formData[selectedScript.name] || {}),
+      authName: selectedCredential.email,
+      authPass: selectedCredential.auth_token,
+    };
     try {
-      let scriptToRun;
-      switch (scriptName) {
-        case "Script 1":
-          scriptToRun = script1;
-          break;
-        case "Script 2":
-          scriptToRun = script2;
-          break;
-        case "Assets to Assets Copy":
-          scriptToRun = assetToAssetCopy;
-        case "Schema List":
-          scriptToRun = schemaList;
-          break;
-        default:
-          throw new Error("Script not found");
-      }
-
-      if (typeof scriptToRun.run !== "function") {
-        throw new Error(
-          `Script ${scriptName} does not export a function 'run'.`
-        );
-      }
-
-      const result = scriptToRun.run(params, (intermediateOutput: string) => {
-        setOutput((prevOutput) => prevOutput + intermediateOutput + "\n");
-      });
+      const result = await runScript(selectedScript.name, params, setOutput);
       setOutput((prevOutput) => prevOutput + `Script Output: ${result}\n`);
     } catch (error) {
       console.error("Error executing script:", error);
@@ -68,81 +53,50 @@ export default function ScriptsPage() {
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Scripts</h1>
-
-      <div className="mb-4">
-        <label
-          htmlFor="script-select"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Select a Script
-        </label>
-        <select
-          id="script-select"
-          className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          value={selectedScript?.name || ""}
-          onChange={(e) => {
-            const script = scriptsData.scripts.find(
-              (s) => s.name === e.target.value
-            );
-            setSelectedScript(script || null);
-            setOutput("");
-          }}
-        >
-          <option value="" disabled>
-            -- Select a script --
-          </option>
-          {scriptsData.scripts.map((script) => (
-            <option key={script.name} value={script.name}>
-              {script.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
+      <ScriptSelector
+        scripts={scriptsData.scripts}
+        selectedScript={selectedScript}
+        onSelect={handleScriptSelection}
+      />
       {selectedScript && (
-        <div className="p-4 border rounded-md shadow-sm bg-white">
-          <h4 className="font-medium">{selectedScript.name}</h4>
-          <p className="text-sm text-gray-500">{selectedScript.description}</p>
-          <div className="mt-2">
-            <h5 className="text-xs font-medium">Parameters:</h5>
-            {selectedScript.parameters?.map((param) => (
-              <div key={param.name} className="mt-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  {param.label}{" "}
-                  {param.required && <span className="text-red-500">*</span>}
-                </label>
-                <input
-                  type={param.type === "text" ? "text" : param.type}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  required={param.required}
-                  onChange={(e) =>
-                    handleInputChange(
-                      selectedScript.name,
-                      param.name,
-                      e.target.value
-                    )
-                  }
-                />
-              </div>
-            ))}
-          </div>
-          <button
-            onClick={() => executeScript(selectedScript.name)}
-            className="mt-4 w-full rounded-md bg-blue-500 py-2 px-4 text-white hover:bg-blue-600"
-          >
-            Run Script
-          </button>
-        </div>
+        <ScriptForm
+          script={selectedScript}
+          formData={formData[selectedScript.name] || {}}
+          onChange={handleInputChange}
+          onSubmit={executeScript}
+        />
       )}
-
-      {output && (
-        <div
-          style={{ whiteSpace: "pre-wrap" }}
-          className="mt-4 p-4 bg-gray-100 border rounded-md"
-        >
-          {output}
-        </div>
-      )}
+      {output && <OutputDisplay output={output} />}
     </div>
   );
+}
+
+async function runScript(
+  scriptName: string,
+  params: Record<string, string>,
+  setOutput: React.Dispatch<React.SetStateAction<string>>
+) {
+  let scriptToRun;
+  switch (scriptName) {
+    case "Script 1":
+      scriptToRun = (await import("@/public/scripts/script1")).default;
+      break;
+    case "Script 2":
+      scriptToRun = (await import("@/public/scripts/script2")).default;
+      break;
+    case "Assets to Assets Copy":
+      scriptToRun = (await import("@/public/scripts/assetToAssetCopy")).default;
+      break;
+    case "Schema List":
+      scriptToRun = (await import("@/public/scripts/schemaList")).default;
+      break;
+    default:
+      throw new Error("Script not found");
+  }
+  if (typeof scriptToRun.run !== "function") {
+    throw new Error(`Script ${scriptName} does not export a 'run' function.`);
+  }
+  return scriptToRun.run(params, (intermediateOutput: string) => {
+    setOutput((prevOutput) => prevOutput + intermediateOutput + "\n");
+  });
 }
