@@ -23,7 +23,6 @@ export default function CreateForm() {
     saveUserInstanceData,
     initialState
   );
-  const errorMessage = state.message;
   const isFormValid = authToken && email && instance;
 
   return (
@@ -105,13 +104,11 @@ export default function CreateForm() {
           aria-live="polite"
           aria-atomic="true"
         >
-          {errorMessage && (
+          {state.errors ? (
             <>
-              <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p className="text-sm text-red-500">{errorMessage}</p>
+              <p className="text-sm text-red-500">{state.message}</p>
             </>
-          )}
-          {state.message && state.message !== errorMessage && (
+          ) : (
             <>
               <p className="text-sm text-green-500">{state.message}</p>
             </>
