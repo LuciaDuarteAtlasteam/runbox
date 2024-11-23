@@ -10,7 +10,7 @@ export type User = {
 };
 export type InstanceForm = {
   id: string;
-  authToken: string;
+  auth_token: string;
   email: string;
   instance: string;
   userId: string;
