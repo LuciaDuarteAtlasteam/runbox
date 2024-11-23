@@ -1,3 +1,4 @@
+"use server";
 import { sql } from "@vercel/postgres";
 import { InstanceForm } from "./definitions";
 
