@@ -30,3 +30,9 @@ export type Script = {
 export type ScriptData = {
   scripts: Script[];
 };
+export type ScriptResult = {
+  executedAt: any;
+  scriptName: string;
+  parameters: Record<string, any>;
+  result: any;
+};
