@@ -94,6 +94,19 @@
           "required": true
         }
       ]
+    },
+    {
+      "name": "Orga List",
+      "path": "/scripts/getAllOrgsFromSD.js",
+      "description": "Resource to find all Organisations from Service Desks",
+      "parameters": [
+        {
+          "name": "jiraSubDomain",
+          "label": "Jira Subdomain",
+          "type": "text",
+          "required": true
+        }
+      ]
     }
   ]
 }
