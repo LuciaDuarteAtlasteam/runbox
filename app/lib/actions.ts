@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth, signIn } from "@/auth";
 import { AuthError } from "next-auth";
-import type { User } from "@/app/lib/definitions";
+import type { ScriptResult, User } from "@/app/lib/definitions";
 
 // Define user schema using Zod
 const FormSchema = z.object({
@@ -116,6 +116,53 @@ export async function deleteInstanceData(id: string) {
     return { message: "Database Error: Failed to Delete Instance." };
   }
 }
+export async function saveScriptResult({
+  scriptName,
+  parameters,
+  result,
+  executedAt,
+}: ScriptResult) {
+  console.log("EXECUTED AT", executedAt);
+
+  const session = await auth();
+  const userEmail = session?.user?.email;
+
+  if (!userEmail) {
+    return { message: "User not authenticated." };
+  }
+  try {
+    await sql`
+      INSERT INTO script_results (script_name, parameters, result, user_email, execution_date)
+      VALUES (${scriptName}, ${JSON.stringify(parameters)}, ${JSON.stringify(
+      result
+    )}, ${userEmail}, ${executedAt})
+    `;
+    console.log("Script result saved successfully.");
+  } catch (error) {
+    console.error("Error saving script result:", error);
+    throw new Error("Failed to save script result.");
+  }
+}
+export async function fetchUserScriptResults() {
+  const session = await auth();
+  const userEmail = session?.user?.email;
+
+  if (!userEmail) {
+    throw new Error("User not authenticated.");
+  }
+  try {
+    const results = await sql`
+      SELECT * FROM script_results
+      WHERE user_email = ${userEmail}
+      ORDER BY execution_date DESC;
+    `;
+    return results.rows;
+  } catch (error) {
+    console.error("Error fetching user script results:", error);
+    throw new Error("Failed to fetch user script results.");
+  }
+}
+
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData
