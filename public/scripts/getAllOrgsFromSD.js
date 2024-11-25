@@ -1,8 +1,6 @@
 const orgaList = {
   run: async (params, updateOutput) => {
-    updateOutput(
-      `Running script to get all organisations from Service Desk`
-    );
+    updateOutput(`Running script to get all organisations from Service Desk`);
 
     const orgasInSD = await getAllOrganizations(params);
 
@@ -12,19 +10,16 @@ const orgaList = {
   },
 };
 
-
 // return all orgas
 async function getAllOrganizations() {
-
   let startAt = 0;
   const maxResults = 50;
-  
+
   // collect the results
   let completeList = [];
   let last = false;
 
-
-  while(last == false) {
+  while (last == false) {
     const path = `https://${params.jiraSubDomain}.atlassian.com/rest/servicedeskapi/organization?start=${startAt}&limit=${maxResults}`;
     const orgaList = await getAPI(path, params);
 
@@ -35,9 +30,7 @@ async function getAllOrganizations() {
   }
 
   return completeList;
-
 }
-
 
 async function getAPI(path, params) {
   var myHeaders = new Headers();
@@ -64,3 +57,5 @@ async function getAPI(path, params) {
 
   return data.json();
 }
+
+export default orgaList;
