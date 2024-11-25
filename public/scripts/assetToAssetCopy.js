@@ -1,3 +1,4 @@
+import { getAPI } from "./helperFunctions";
 /// TODO:
 /// create status and reference
 /// when creating object attributes, name attribute already exist, and we dont update the description (needs PUT)
@@ -55,7 +56,8 @@ const assetToAssetCopy = {
     await sleep(500);
 
     const objectTypesInSource = await getObjectTypesForSchema(
-      objectSchemaIdSource
+      objectSchemaIdSource,
+      params
     );
     const objectTypeIdMap = await createObjectTypesProcedure(
       objectTypesInSource
@@ -65,7 +67,8 @@ const assetToAssetCopy = {
 
     const statusListSource = await getStatusList(
       sourceWorkSpaceId,
-      objectSchemaIdSource
+      objectSchemaIdSource,
+      params
     );
     const statusListSourceGlobal = await getStatusList(sourceWorkSpaceId);
     const statusListTargetGlobal = await getStatusList(targetWorkSpaceId);
@@ -90,7 +93,7 @@ const assetToAssetCopy = {
 async function schemaList() {
   // Get Object Schema List
   const path = `${jsmApiUrl}${sourceWorkSpaceId}/v1/objectschema/list`;
-  const schemaList = await getAPI(path);
+  const schemaList = await getAPI(path, params);
 
   return schemaList;
 }
@@ -104,19 +107,19 @@ async function createSchemaCopy(schemaData) {
 }
 
 // Get Status list
-async function getStatusList(workspaceId, schemaId) {
+async function getStatusList(workspaceId, schemaId, params) {
   const queryParam = schemaId ? `?objectSchemaId=${schemaId}` : "";
 
   const path = `${jsmApiUrl}${workspaceId}/v1/config/statustype${queryParam}`;
-  const statusList = await getAPI(path);
+  const statusList = await getAPI(path, params);
 
   return statusList;
 }
 
 // Get All Object Types
-async function getObjectTypesForSchema(objectSchemaId) {
+async function getObjectTypesForSchema(objectSchemaId, params) {
   let path = `${jsmApiUrl}${sourceWorkSpaceId}/v1/objectschema/${objectSchemaId}/objecttypes/flat`;
-  const objectTypes = await getAPI(path);
+  const objectTypes = await getAPI(path, params);
 
   //console.log(objectTypes);
 
@@ -367,7 +370,7 @@ async function createAttributesInAllObjects(objectTypeIdMapping, statusIdMap) {
 // Get the attributes for an objectType (inherited excluded)
 async function getObjectTypeAttributes(objectTypeId) {
   const path = `${jsmApiUrl}${sourceWorkSpaceId}/v1/objecttype/${objectTypeId}/attributes?excludeParentAttributes=true&onlyValueEditable=true`;
-  const objectTypeAttributes = await getAPI(path);
+  const objectTypeAttributes = await getAPI(path, params);
   return objectTypeAttributes;
 }
 
@@ -383,29 +386,6 @@ async function createAttributeInObjectType(objectTypeId, objectTypeAttribute) {
 ///////////////////////////
 
 // Functions
-async function getAPI(path) {
-  var myHeaders = new Headers();
-  myHeaders.append(
-    "Authorization",
-    `Basic ${Buffer.from(authName + ":" + authPass).toString("base64")}`
-  );
-
-  var requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow",
-  };
-
-  const response = await fetch(path, requestOptions);
-  const data = await response;
-
-  if (!response.ok)
-    return console.error(
-      `Unexpected Response in GET: ${response.status} - ${response.statusText} for ${path} : \n ${response.text}`
-    );
-
-  return data.json();
-}
 
 async function postAPI(path, json) {
   var raw = JSON.stringify(json);
