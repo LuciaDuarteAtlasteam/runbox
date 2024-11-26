@@ -1,13 +1,23 @@
 "use server";
 import { sql } from "@vercel/postgres";
-import { InstanceForm } from "./definitions";
+import { InstanceForm, User } from "./definitions";
+import { auth } from "@/auth";
 
 export async function fetchInstanceData() {
+  const session = await auth();
+  console.log(session);
+  const userEmail = session?.user?.email;
+  if (!userEmail) {
+    throw new Error("User not logged in.");
+  }
+  const user = await sql<User>`SELECT * FROM users WHERE email=${userEmail}`;
+  const userId = user.rows[0].id;
+
   try {
-    console.log("Fetching instance_data...");
+    const data = await sql<InstanceForm>`
+      SELECT * FROM instanceForm WHERE user_id = ${userId};
 
-    const data = await sql<InstanceForm>`SELECT * FROM instanceForm`;
-
+    `;
     return data.rows;
   } catch (error) {
     console.error("Database Error:", error);
